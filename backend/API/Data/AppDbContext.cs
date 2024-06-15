@@ -1,3 +1,4 @@
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -8,5 +9,7 @@ namespace API.Data
         {
 
         }
+
+        public DbSet<Product> Products { get; set; }
     }
 }
