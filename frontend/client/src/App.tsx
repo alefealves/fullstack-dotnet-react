@@ -1,10 +1,33 @@
-import { Box, Button, Flex, Heading, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import './App.css'
-import { AddIcon } from '@chakra-ui/icons'
+import { Badge, Box, Button, Flex, HStack, Heading, Skeleton, SkeletonCircle, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import './App.css';
+import { AddIcon } from '@chakra-ui/icons';
+import { BASE_URL } from './constant';
+import { useEffect, useState } from 'react';
+import { Product } from './types/product';
+import axios from 'axios';
+import ProductSkeleton from './components/ProductSkeleton';
 
 function App() {
 
-  const fecthData = () => {}
+  const [data, setData] = useState<Product[]>([]);
+  const [isLoanding, setIsLoanding] = useState<boolean>(false);
+
+  useEffect(() => {
+    fecthData();
+  }, [])
+  
+  const fecthData = () => {
+    setIsLoanding(true);
+    axios.get(BASE_URL+"product").then((res) => {
+      setData(res.data);
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+      setIsLoanding(false)
+    })
+  }
+
+  if (isLoanding) return <ProductSkeleton />  
 
   return (
     <Box
@@ -30,7 +53,6 @@ function App() {
 
       <TableContainer>
         <Table variant='striped'>
-          <TableCaption>Imperial to metric conversion factors</TableCaption>
           <Thead>
             <Tr>
               <Th>Id</Th>
@@ -42,14 +64,16 @@ function App() {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>inches</Td>
-              <Td>millimetres (mm)</Td>
-              <Td>25.4</Td>
-              <Td>25.4</Td>
-              <Td isNumeric>25.4</Td>
-              <Td>25.4</Td>
-            </Tr>
+            {data.map((product : Product) => (
+              <Tr>
+                <Td>{product.id}</Td>
+                <Td>{product.name}</Td>
+                <Td>{product.description}</Td>
+                <Td>{product.isAvailable}</Td>
+                <Td isNumeric>{product.price}</Td>
+                <Td>25.4</Td>
+              </Tr>
+            ))}  
           </Tbody>
         </Table>
       </TableContainer>
@@ -58,3 +82,9 @@ function App() {
 }
 
 export default App
+
+
+
+
+
+
