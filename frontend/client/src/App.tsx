@@ -10,7 +10,8 @@ import ProductForm from './components/ProductForm';
 
 function App() {
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [ currentData, setCurrentData ] = useState<Product>({} as Product);
   const [data, setData] = useState<Product[]>([]);
   const [isLoanding, setIsLoanding] = useState<boolean>(false);
 
@@ -27,6 +28,20 @@ function App() {
     }).finally(() => {
       setIsLoanding(false)
     })
+  }
+
+  const getProduct = (id: number) => {
+    axios.get<Product>(BASE_URL+"product/"+id).then((res) => {
+      setCurrentData(res.data);
+      onOpen();
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const handleAdd = () => {
+    setCurrentData({} as Product);
+    onOpen();
   }
 
   if (isLoanding) return <ProductSkeleton />  
@@ -46,7 +61,7 @@ function App() {
         <Button
           colorScheme='blue'
           leftIcon={<AddIcon />}
-          onClick={onOpen}
+          onClick={() => handleAdd()}
         >
           Add Product
         </Button>
@@ -81,9 +96,11 @@ function App() {
                 <Td isNumeric>{product.price}</Td>
                 <Td>  
                   <HStack gap={3}> 
-                    <EditIcon boxSize={22} color={'blue'} />
-                    <DeleteIcon boxSize={22} color={'blue'} />
-                    <ViewIcon boxSize={22} color={'blue'} />
+                    <EditIcon 
+                      onClick={() => getProduct(product.id)}
+                      boxSize={22} color={'blue'} />
+                    <DeleteIcon boxSize={22} color={'red'} />
+                    <ViewIcon boxSize={22} color={'green'} />
                   </HStack>
                 </Td>
               </Tr>
@@ -100,6 +117,7 @@ function App() {
 
       {isOpen && 
         <ProductForm 
+          currentData={currentData}
           isOpen={isOpen}
           fetchProduct={fecthData} 
           onClose={onClose} />
