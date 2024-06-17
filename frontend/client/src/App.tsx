@@ -1,4 +1,4 @@
-import { Avatar, Badge, Box, Button, Flex, HStack, Heading, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
+import { Avatar, Badge, Box, Button, Flex, HStack, Heading, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from '@chakra-ui/react';
 import './App.css';
 import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { BASE_URL } from './constant';
@@ -14,6 +14,7 @@ function App() {
   const [ currentData, setCurrentData ] = useState<Product>({} as Product);
   const [data, setData] = useState<Product[]>([]);
   const [isLoanding, setIsLoanding] = useState<boolean>(false);
+  const toast = useToast();
 
   useEffect(() => {
     fecthData();
@@ -42,6 +43,21 @@ function App() {
   const handleAdd = () => {
     setCurrentData({} as Product);
     onOpen();
+  }
+
+  const onDeleteHandle = (id: number) => {
+    axios.delete(BASE_URL+"product/"+id).then(() => {
+      toast({
+        title: 'Product is deleted.',
+        description: "We've deleted your product.",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      fecthData();
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 
   if (isLoanding) return <ProductSkeleton />  
@@ -99,7 +115,25 @@ function App() {
                     <EditIcon 
                       onClick={() => getProduct(product.id)}
                       boxSize={22} color={'blue'} />
-                    <DeleteIcon boxSize={22} color={'red'} />
+                    <Popover>
+                      <PopoverTrigger>
+                        <DeleteIcon boxSize={22} color={'red'} />
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <PopoverArrow />
+                        <PopoverCloseButton />
+                        <PopoverHeader>Confirmation!</PopoverHeader>
+                        <PopoverBody>Are you sure to delete this?</PopoverBody>
+                        <PopoverFooter>
+                          <Button 
+                            float={'right'} 
+                            onClick={() => onDeleteHandle(product.id)}
+                            colorScheme={'red'}
+                            >Delete</Button>
+                        </PopoverFooter> 
+                      </PopoverContent>
+                    </Popover>  
+                    
                     <ViewIcon boxSize={22} color={'green'} />
                   </HStack>
                 </Td>

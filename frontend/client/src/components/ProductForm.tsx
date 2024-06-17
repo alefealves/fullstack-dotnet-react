@@ -57,7 +57,7 @@ const ProductForm = ({isOpen, onClose, fetchProduct, currentData}:ProductFormPro
         title: 'Product is updated.',
         description: "We've updated your product.",
         status: 'success',
-        duration: 9000,
+        duration: 5000,
         isClosable: true,
       })
     }).catch((err) => {
