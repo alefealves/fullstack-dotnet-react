@@ -11,5 +11,16 @@ namespace API.Data
         }
 
         public DbSet<Product> Products { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasSequence<int>("ProdSeq", schema: "dbo")
+                .StartsAt(1)
+                .IncrementsBy(1);
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Id)
+                .HasDefaultValueSql("NEXT VALUE FOR dbo.ProdSeq");
+        }
     }
 }
