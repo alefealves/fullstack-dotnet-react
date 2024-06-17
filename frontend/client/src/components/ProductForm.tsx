@@ -24,7 +24,7 @@ const ProductForm = ({isOpen, onClose, fetchProduct, currentData}:ProductFormPro
   })
 
   const onSave = () => {
-    if(currentData) {
+    if(currentData?.id) {
       editProduct();
     } else {
       addProduct();

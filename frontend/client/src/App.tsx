@@ -7,11 +7,14 @@ import { Product } from './types/product';
 import axios from 'axios';
 import ProductSkeleton from './components/ProductSkeleton';
 import ProductForm from './components/ProductForm';
+import ViewDetail from './components/ViewDetail';
 
 function App() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen:viewDialogOpen, onClose:viewDialogClose, onOpen:onViewDialogOpen } = useDisclosure();
   const [ currentData, setCurrentData ] = useState<Product>({} as Product);
+  
   const [data, setData] = useState<Product[]>([]);
   const [isLoanding, setIsLoanding] = useState<boolean>(false);
   const toast = useToast();
@@ -55,6 +58,15 @@ function App() {
         isClosable: true,
       });
       fecthData();
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const handleViewDetail = (id: number) => {
+    axios.get<Product>(BASE_URL+"product/"+id).then((res) => {
+      setCurrentData(res.data);
+      onViewDialogOpen();
     }).catch((err) => {
       console.log(err)
     })
@@ -134,7 +146,10 @@ function App() {
                       </PopoverContent>
                     </Popover>  
                     
-                    <ViewIcon boxSize={22} color={'green'} />
+                    <ViewIcon 
+                      onClick={() => handleViewDetail(product.id)}
+                      boxSize={22} 
+                      color={'green'} />
                   </HStack>
                 </Td>
               </Tr>
@@ -155,6 +170,14 @@ function App() {
           isOpen={isOpen}
           fetchProduct={fecthData} 
           onClose={onClose} />
+      }
+
+      {viewDialogOpen && 
+        <ViewDetail 
+          isOpen={viewDialogOpen}
+          onClose={viewDialogClose}
+          currentData={currentData}
+          /> 
       }
     </Box>  
   )
