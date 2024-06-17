@@ -1,4 +1,4 @@
-import { Avatar, Badge, Box, Button, Flex, HStack, Heading, Skeleton, SkeletonCircle, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import { Avatar, Badge, Box, Button, Flex, HStack, Heading, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
 import './App.css';
 import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { BASE_URL } from './constant';
@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react';
 import { Product } from './types/product';
 import axios from 'axios';
 import ProductSkeleton from './components/ProductSkeleton';
+import ProductForm from './components/ProductForm';
 
 function App() {
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [data, setData] = useState<Product[]>([]);
   const [isLoanding, setIsLoanding] = useState<boolean>(false);
 
@@ -40,13 +42,11 @@ function App() {
         alignContent={'center'}
         mb={5}
       >
-        <Heading
-          fontSize="20">
-          Product List
-        </Heading>
+        <Heading fontSize="20">Product List</Heading>
         <Button
           colorScheme='blue'
           leftIcon={<AddIcon />}
+          onClick={onOpen}
         >
           Add Product
         </Button>
@@ -91,6 +91,19 @@ function App() {
           </Tbody>
         </Table>
       </TableContainer>
+
+      {data.length == 0 && (
+        <Heading textAlign={'center'} p="5" fontSize={14} >
+         Sem dados
+        </Heading>
+      )}
+
+      {isOpen && 
+        <ProductForm 
+          isOpen={isOpen}
+          fetchProduct={fecthData} 
+          onClose={onClose} />
+      }
     </Box>  
   )
 }
