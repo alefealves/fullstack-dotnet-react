@@ -19,7 +19,7 @@ public class ProductController : ControllerBase
   [HttpGet]
   public async Task<IActionResult> Products()
   {
-    await Taks.Delay(2000);
+    await Task.Delay(1000);
     return Ok(await _context.Products.AsNoTracking().ToListAsync());
   }
 

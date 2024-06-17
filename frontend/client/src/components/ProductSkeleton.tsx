@@ -17,12 +17,14 @@ const ProductSkeleton = () => {
         <Heading>
           <Skeleton>Product List</Skeleton>
         </Heading>
-        <Button
-          colorScheme='blue'
-          leftIcon={<AddIcon />}
-        >
-          <Skeleton>Add Product</Skeleton>
-        </Button>
+          <Skeleton>
+            <Button
+            colorScheme='blue'
+            leftIcon={<AddIcon />}
+            >
+              <Skeleton>Add Product</Skeleton>
+            </Button>
+          </Skeleton>
       </Flex>
 
       <TableContainer>
@@ -54,7 +56,13 @@ const ProductSkeleton = () => {
                   </Badge>
                 </Td>
                 <Td isNumeric><Skeleton>123</Skeleton></Td>
-                <Td><Skeleton>Actions</Skeleton></Td>
+                <Td>
+                  <HStack>
+                    <Skeleton>1</Skeleton>
+                    <Skeleton>2</Skeleton>
+                    <Skeleton>3</Skeleton>
+                  </HStack>
+                </Td>
               </Tr>
             ))}
           </Tbody>

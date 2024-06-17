@@ -1,6 +1,6 @@
-import { Badge, Box, Button, Flex, HStack, Heading, Skeleton, SkeletonCircle, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import { Avatar, Badge, Box, Button, Flex, HStack, Heading, Skeleton, SkeletonCircle, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import './App.css';
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { BASE_URL } from './constant';
 import { useEffect, useState } from 'react';
 import { Product } from './types/product';
@@ -40,7 +40,8 @@ function App() {
         alignContent={'center'}
         mb={5}
       >
-        <Heading>
+        <Heading
+          fontSize="20">
           Product List
         </Heading>
         <Button
@@ -67,11 +68,24 @@ function App() {
             {data.map((product : Product) => (
               <Tr>
                 <Td>{product.id}</Td>
-                <Td>{product.name}</Td>
+                <Td>
+                  <HStack>
+                    <Avatar size={'sm'} name={product.name} />
+                    <Text>{product.name}</Text>
+                  </HStack>
+                </Td>
                 <Td>{product.description}</Td>
-                <Td>{product.isAvailable}</Td>
+                <Td>
+                  <Badge>{product.isAvailable ? 'Sim' : 'Não'}</Badge>
+                </Td>
                 <Td isNumeric>{product.price}</Td>
-                <Td>25.4</Td>
+                <Td>  
+                  <HStack gap={3}> 
+                    <EditIcon boxSize={22} color={'blue'} />
+                    <DeleteIcon boxSize={22} color={'blue'} />
+                    <ViewIcon boxSize={22} color={'blue'} />
+                  </HStack>
+                </Td>
               </Tr>
             ))}  
           </Tbody>
