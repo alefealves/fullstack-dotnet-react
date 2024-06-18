@@ -57,5 +57,5 @@ dotnet run watch
 
 Este projeto utiliza as seguintes dependências externas:
 
-- **React 17**: Biblioteca Typescript para construção de aplicações web.
+- **React 18**: Biblioteca Typescript para construção de aplicações web.
 - **.Net8.0**: Framework para construção de aplicacao fullstack.
